@@ -1,0 +1,7 @@
+crewai
+crewai-tools
+agentops
+setuptools
+ipykernel
+jupyter
+langchain_openai
