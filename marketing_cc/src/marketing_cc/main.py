@@ -1,6 +1,7 @@
 import sys
 import warnings
 import json
+from dotenv import load_dotenv
 
 from datetime import datetime
 
@@ -11,6 +12,8 @@ warnings.filterwarnings(
     category=SyntaxWarning,
     module="pysbd"
 )
+
+_ = load_dotenv()
 
 def get_default_inputs():
     return {
