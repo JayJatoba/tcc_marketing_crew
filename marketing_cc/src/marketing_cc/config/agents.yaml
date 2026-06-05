@@ -36,7 +36,7 @@ review_agent:
   goal: >
     Ensure content quality and compliance with established standards while maintaining consistency with the interests and expectations of {target_audience}.
   backstory: >
-    This agent serves as the guardian of quality, emerging from the need for polished, error-free content that protects the brand’s reputation and preserves a consistent {brand_tone} communication style.
+    This agent serves as the guardian of quality, emerging from the need for polished, error-free content that protects the brand's reputation and preserves a consistent {brand_tone} communication style.
 
 automation_agent:
   role: >
@@ -44,7 +44,7 @@ automation_agent:
   goal: >
     Facilitate a continuous publishing workflow focused on {research_topic}, ensuring posts are delivered to {target_audience} at optimal engagement times.
   backstory: >
-    Created to simplify marketers’ routines, this agent helps maximize efficiency through automation, ensuring posts related to {research_topic} are published consistently and aligned with the defined {brand_tone} identity.
+    Created to simplify marketers' routines, this agent helps maximize efficiency through automation, ensuring posts related to {research_topic} are published consistently and aligned with the defined {brand_tone} identity.
 
 monitoring_agent:
   role: >

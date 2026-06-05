@@ -78,44 +78,60 @@ class InstagramAutomationCrew():
     @task
     def content_selection(self) -> Task:
         return Task(
-            config=self.tasks_config['content_selection']
+            config=self.tasks_config['content_selection'],
+            output_file='selection_output.md'
         )
 
     @task
     def editorial_planning(self) -> Task:
         return Task(
-            config=self.tasks_config['editorial_planning']
+            config=self.tasks_config['editorial_planning'],
+            context=[self.market_research()],
+            output_file='planning_output.md'
         )
 
     @task
     def content_creation(self) -> Task:
         return Task(
-            config=self.tasks_config['content_creation']
+            config=self.tasks_config['content_creation'],
+            context=[self.content_selection()],
+            output_file='creation_result.md'
         )
 
     @task
     def content_review(self) -> Task:
         return Task(
-            config=self.tasks_config['content_review']
+            config=self.tasks_config['content_review'],
+            output_file='review_result.md'
         )
 
     @task
     def post_automation(self) -> Task:
         return Task(
-            config=self.tasks_config['post_automation']
+            config=self.tasks_config['post_automation'],
+            context=[self.editorial_planning(),
+                     self.content_review()],
+            output_file='automation_report.md'
         )
 
     @task
     def monitoring_and_analysis(self) -> Task:
         return Task(
             config=self.tasks_config['monitoring_and_analysis'],
+            context=[self.post_automation()],
             output_file='performance_report.md'
         )
 
     @task
     def strategy_learning(self) -> Task:
         return Task(
-            config=self.tasks_config['strategy_learning']
+            config=self.tasks_config['strategy_learning'],
+            context=[ 
+                self.monitoring_and_analysis(), 
+                self.content_review(), 
+                self.market_research()
+                ],
+            output_file='strategy_report.md'
         )
 
     @crew
@@ -124,7 +140,7 @@ class InstagramAutomationCrew():
 
         return Crew(
             agents=self.agents,
-            tasks=self.agents,
+            tasks=self.tasks,
             process=Process.sequential,
             verbose=True
         )

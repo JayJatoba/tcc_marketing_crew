@@ -1,64 +1,70 @@
-tasks:
-  - task_name: market_research
-    description: >
-      Conduct research on trends, news, and relevant topics related to {research_topic}, focusing on the interests and behaviors of {target_audience}.
-    expected_output: >
-      Research reports containing trends, opportunities, and insights about {research_topic} tailored for {target_audience}.
-    agent: >
-      Research Agent
+market_research:
+  description: >
+    Conduct research on trends, news, and relevant topics related to {research_topic}, focusing on the interests and behaviors of {target_audience}.
+  expected_output: >
+    Research reports containing trends, opportunities, and insights about {research_topic} tailored for {target_audience}.
+  agent: research_agent
 
-  - task_name: content_selection
-    description: >
-      Select and organize important content related to {research_topic} for publications targeting {target_audience}.
-    expected_output: >
-      Organized and prioritized content about {research_topic} ready for publication using a {brand_tone} communication style.
-    agent: >
-      Content Selection Agent
+content_selection:
+  description: >
+    Select and organize important content related to {research_topic} for publications targeting {target_audience}.
+  expected_output: >
+    Organized and prioritized content about {research_topic} ready for publication using a {brand_tone} communication style.
+  agent: content_selection_agent
 
-  - task_name: editorial_planning
-    description: >
-      Create strategic publishing plans tailored to {target_audience} using content related to {research_topic}.
-    expected_output: >
-      Organized publishing plans focused on {research_topic}, optimized for engagement with {target_audience}.
-    agent: >
-      Editorial Planning Agent
+editorial_planning:
+  description: >
+    Create strategic publishing plans tailored to {target_audience} using content related to {research_topic}.
+  expected_output: >
+    Organized publishing plans focused on {research_topic}, optimized for engagement with {target_audience}.
+  agent: editorial_planning_agent
 
-  - task_name: content_creation
-    description: >
-      Create headlines, engagement-optimized captions, and prompts for graphic content creation related to {research_topic}, using a {brand_tone} tone for {target_audience}.
-    expected_output: >
-      Created content including headlines, captions, and visual prompts about {research_topic} aligned with the {brand_tone} style.
-    agent: >
-      Content Creation Agent
+content_creation:
+  description: >
+    Create headlines, engagement-optimized captions, and prompts for graphic content creation related to {research_topic}, using a {brand_tone} tone for {target_audience}.
+  expected_output: >
+    Created content including headlines, captions, and visual prompts about {research_topic} aligned with the {brand_tone} style.
+  agent: content_creation_agent
 
-  - task_name: content_review
-    description: >
-      Validate and review all produced content related to {research_topic} to ensure quality, grammatical correctness, and consistency with the {brand_tone} identity.
-    expected_output: >
-      Reviewed and refined content about {research_topic} with improvement feedback and communication consistency.
-    agent: >
-      Review Agent
+content_review:
+  description: >
+    Validate and review all produced content related to {research_topic} to ensure quality, grammatical correctness, and consistency with the {brand_tone} identity.
+  expected_output: >
+    Reviewed and refined content about {research_topic} with improvement feedback and communication consistency.
+  agent: review_agent
 
-  - task_name: post_automation
-    description: >
-      Schedule automated Instagram posts related to {research_topic} based on the defined publishing plans and audience engagement patterns.
-    expected_output: >
-      Automated posting schedule for content about {research_topic} updated and optimized for {target_audience}.
-    agent: >
-      Automation Agent
+post_automation:
+  description: >
+    Schedule automated Instagram posts related to {research_topic} based on the defined publishing plans and audience engagement patterns.
+  expected_output: >
+    Automated posting schedule for content about {research_topic} updated and optimized for {target_audience}.
+  agent: automation_agent
 
-  - task_name: monitoring_and_analysis
-    description: >
-      Monitor post metrics and engagement in real time for content related to {research_topic}, analyzing the behavior of {target_audience}.
-    expected_output: >
-      Performance reports and engagement analysis for posts about {research_topic}, including insights about {target_audience}.
-    agent: >
-      Monitoring Agent
+monitoring_and_analysis:
+  description: >
+    Monitor post metrics and engagement in real time for content related to {research_topic}, analyzing the behavior of {target_audience}.
+  expected_output: >
+    Performance reports and engagement analysis for posts about {research_topic}, including insights about {target_audience}.
+  agent: monitoring_agent
 
-  - task_name: agent_collaboration
-    description: >
-      Ensure that different agents collaborate synergistically while working on content related to {research_topic}, maintaining consistency with the {brand_tone} identity and the interests of {target_audience}.
-    expected_output: >
-      Effective communication and synchronization between agents focused on {research_topic} and aligned with the target audience strategy.
-    agent: >
-      Learning Agent
+agent_collaboration:
+  description: >
+    Ensure that different agents collaborate synergistically while working on content related to {research_topic}, maintaining consistency with the {brand_tone} identity and the interests of {target_audience}.
+  expected_output: >
+    Effective communication and synchronization between agents focused on {research_topic} and aligned with the target audience strategy.
+  agent: learning_agent
+
+strategy_learning:
+  description: >
+    Analyze previous campaign performance, engagement reports,
+    audience behavior, and content effectiveness related to
+    {research_topic}. Generate strategic recommendations for
+    improving future Instagram marketing campaigns targeted at
+    {target_audience} while maintaining the {brand_tone} style.
+
+  expected_output: >
+    A strategic optimization report containing recommendations
+    for improving content quality, engagement rates, posting
+    schedules, audience targeting, and future campaign strategies.
+
+  agent: learning_agent
