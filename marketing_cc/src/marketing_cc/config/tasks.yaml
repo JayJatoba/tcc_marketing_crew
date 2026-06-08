@@ -21,9 +21,19 @@ editorial_planning:
 
 content_creation:
   description: >
-    Create headlines, engagement-optimized captions, and prompts for graphic content creation related to {research_topic}, using a {brand_tone} tone for {target_audience}.
+    Create Instagram-ready content related to {research_topic}, including: 
+    - engaging captions 
+    - hashtags 
+    - CTA 
+    - visual concept 
+    - AI image generation prompt 
+    Use the image generation tool whenever visual content is needed.
   expected_output: >
-    Created content including headlines, captions, and visual prompts about {research_topic} aligned with the {brand_tone} style.
+    A complete Instagram post package containing: 
+    - caption 
+    - hashtags 
+    - image prompt 
+    - generated image URL
   agent: content_creation_agent
 
 content_review:

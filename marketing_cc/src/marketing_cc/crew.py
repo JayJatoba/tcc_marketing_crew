@@ -2,6 +2,10 @@ from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
 from crewai.agents.agent_builder.base_agent import BaseAgent
 
+from tools.image_generation_tool import ImageGenerationTool
+from datetime import datetime 
+
+
 
 @CrewBase
 class InstagramAutomationCrew():
@@ -9,6 +13,9 @@ class InstagramAutomationCrew():
     
     agents: list[BaseAgent]
     tasks: list[Task]
+    
+    TIMESTAMP = datetime.now().strftime("%Y%m%d_%H%M%S") 
+    OUTPUT_DIR = f"output/{TIMESTAMP}"
     
     # Agents section
     @agent
@@ -37,7 +44,8 @@ class InstagramAutomationCrew():
     def content_creation_agent(self) -> Agent:
         return Agent(
             config=self.agents_config['content_creation_agent'],
-            verbose=True
+            verbose=True,
+            tools=[ImageGenerationTool()]
         )
 
     @agent
@@ -79,7 +87,7 @@ class InstagramAutomationCrew():
     def content_selection(self) -> Task:
         return Task(
             config=self.tasks_config['content_selection'],
-            output_file='selection_output.md'
+            output_file=f'{self.OUTPUT_DIR}/selection_output.md'
         )
 
     @task
@@ -87,7 +95,7 @@ class InstagramAutomationCrew():
         return Task(
             config=self.tasks_config['editorial_planning'],
             context=[self.market_research()],
-            output_file='planning_output.md'
+            output_file=f'{self.OUTPUT_DIR}/planning_output.md'
         )
 
     @task
@@ -95,14 +103,14 @@ class InstagramAutomationCrew():
         return Task(
             config=self.tasks_config['content_creation'],
             context=[self.content_selection()],
-            output_file='creation_result.md'
+            output_file=f'{self.OUTPUT_DIR}/creation_result.md'
         )
 
     @task
     def content_review(self) -> Task:
         return Task(
             config=self.tasks_config['content_review'],
-            output_file='review_result.md'
+            output_file=f'{self.OUTPUT_DIR}/review_result.md'
         )
 
     @task
@@ -111,7 +119,7 @@ class InstagramAutomationCrew():
             config=self.tasks_config['post_automation'],
             context=[self.editorial_planning(),
                      self.content_review()],
-            output_file='automation_report.md'
+            output_file=f'{self.OUTPUT_DIR}/automation_report.md'
         )
 
     @task
@@ -119,7 +127,7 @@ class InstagramAutomationCrew():
         return Task(
             config=self.tasks_config['monitoring_and_analysis'],
             context=[self.post_automation()],
-            output_file='performance_report.md'
+            output_file=f'{self.OUTPUT_DIR}/performance_report.md'
         )
 
     @task
@@ -131,7 +139,7 @@ class InstagramAutomationCrew():
                 self.content_review(), 
                 self.market_research()
                 ],
-            output_file='strategy_report.md'
+            output_file=f'{self.OUTPUT_DIR}/strategy_report.md'
         )
 
     @crew
