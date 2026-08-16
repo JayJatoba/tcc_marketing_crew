@@ -7,7 +7,6 @@ from crewai.tools import BaseTool
 from dotenv import load_dotenv
 from openai import OpenAI
 
-
 class ImageGenerationTool(BaseTool):
     name: str = "AI Image Generator"
 
