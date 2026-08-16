@@ -1,22 +1,22 @@
 market_research:
   description: >
-    Conduct research on trends, news, and relevant topics related to {research_topic}, focusing on the interests and behaviors of {target_audience}.
+    Execute a comprehensive scan of current trends, audience pain points, and news regarding {research_topic}. Extract 3-5 major insights relevant to {target_audience}.
   expected_output: >
-    Research reports containing trends, opportunities, and insights about {research_topic} tailored for {target_audience}.
+    A structured report detailing 3-5 verified trends and actionable insights tailored for {target_audience}.
   agent: research_agent
 
 content_selection:
   description: >
-    Select and organize important content related to {research_topic} for publications targeting {target_audience}.
+    Review the market research report. Select the single strongest narrative angle that aligns with the {brand_tone} brand identity.
   expected_output: >
-    Organized and prioritized content about {research_topic} ready for publication using a {brand_tone} communication style.
+    A one-page brief outlining the chosen narrative angle, key messaging points, and the rationale for its selection.
   agent: content_selection_agent
 
 editorial_planning:
   description: >
-    Create strategic publishing plans tailored to {target_audience} using content related to {research_topic}.
+    Transform the selected narrative into a specific post strategy. Define the hook, the core message, the Call to Action (CTA), and the visual concept.
   expected_output: >
-    Organized publishing plans focused on {research_topic}, optimized for engagement with {target_audience}.
+    A detailed post blueprint outlining the hook, body outline, CTA, and visual instructions.
   agent: editorial_planning_agent
 
 content_creation:
@@ -38,43 +38,42 @@ content_creation:
 
 content_review:
   description: >
-    Validate and review all produced content related to {research_topic} to ensure quality, grammatical correctness, and consistency with the {brand_tone} identity.
+    Review the caption and image concept. Correct any grammatical errors, refine the tone to strictly match {brand_tone}, and verify the hashtags are optimal.
   expected_output: >
-    Reviewed and refined content about {research_topic} with improvement feedback and communication consistency.
+    The finalized, error-free caption and confirmation of the visual asset.
   agent: review_agent
 
-post_automation:
+image_hosting:
   description: >
-    Schedule automated Instagram posts related to {research_topic} based on the defined publishing plans and audience engagement patterns.
+    Locate the generated image file path from the content_creation task output. 
+    Use the Image Hosting Tool to upload it to ImgBB. 
+    Return the generated public URL clearly in your response.
   expected_output: >
-    Automated posting schedule for content about {research_topic} updated and optimized for {target_audience}.
-  agent: automation_agent
+    The direct, publicly accessible ImgBB image URL (e.g., https://i.ibb.co/...).
+  agent: image_hosting_agent
+
+instagram_publishing:
+  description: >
+    Read the task context carefully:
+    1. Extract the public image URL from the image_hosting task output.
+    2. Extract the finalized caption text from the content_review task output.
+
+    You MUST execute the "Instagram API Tool" using these two extracted values as parameters. 
+    Do NOT ask for input or respond conversationally without calling the tool.
+  expected_output: >
+    The confirmation message or API response string returned directly by the Instagram API Tool.
+  agent: instagram_publishing_agent
 
 monitoring_and_analysis:
   description: >
-    Monitor post metrics and engagement in real time for content related to {research_topic}, analyzing the behavior of {target_audience}.
+    Analyze the API publication response. Verify if the post was successful. If successful, outline a framework for tracking its first 24-hour engagement metrics.
   expected_output: >
-    Performance reports and engagement analysis for posts about {research_topic}, including insights about {target_audience}.
+    A post-deployment health check report detailing the API success/failure status and the recommended engagement monitoring plan.
   agent: monitoring_agent
-
-agent_collaboration:
-  description: >
-    Ensure that different agents collaborate synergistically while working on content related to {research_topic}, maintaining consistency with the {brand_tone} identity and the interests of {target_audience}.
-  expected_output: >
-    Effective communication and synchronization between agents focused on {research_topic} and aligned with the target audience strategy.
-  agent: learning_agent
 
 strategy_learning:
   description: >
-    Analyze previous campaign performance, engagement reports,
-    audience behavior, and content effectiveness related to
-    {research_topic}. Generate strategic recommendations for
-    improving future Instagram marketing campaigns targeted at
-    {target_audience} while maintaining the {brand_tone} style.
-
+    Review the entire lifecycle of the campaign: from initial research to the final API deployment and initial monitoring report. Identify what worked and what needs improvement.
   expected_output: >
-    A strategic optimization report containing recommendations
-    for improving content quality, engagement rates, posting
-    schedules, audience targeting, and future campaign strategies.
-
+    A comprehensive optimization report containing actionable recommendations for the next cycle.
   agent: learning_agent

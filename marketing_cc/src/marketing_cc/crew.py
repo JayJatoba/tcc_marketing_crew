@@ -2,10 +2,11 @@ from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
 from crewai.agents.agent_builder.base_agent import BaseAgent
 
+from tools.image_hosting_tool import ImageHostingTool
 from tools.image_generation_tool import ImageGenerationTool
+from tools.instagram_api_tool import InstagramAPITool
+
 from datetime import datetime 
-
-
 
 @CrewBase
 class InstagramAutomationCrew():
@@ -50,16 +51,22 @@ class InstagramAutomationCrew():
 
     @agent
     def review_agent(self) -> Agent:
+        return Agent(config=self.agents_config['review_agent'], verbose=True)
+
+    @agent
+    def image_hosting_agent(self) -> Agent:
         return Agent(
-            config=self.agents_config['review_agent'],
-            verbose=True
+            config=self.agents_config['image_hosting_agent'], 
+            verbose=True,
+            tools=[ImageHostingTool()] # <-- Add your cloud upload tool here
         )
 
     @agent
-    def automation_agent(self) -> Agent:
+    def instagram_publishing_agent(self) -> Agent:
         return Agent(
-            config=self.agents_config['automation_agent'],
-            verbose=True
+            config=self.agents_config['instagram_publishing_agent'], 
+            verbose=True,
+            tools=[InstagramAPITool()]
         )
 
     @agent
@@ -114,19 +121,25 @@ class InstagramAutomationCrew():
         )
 
     @task
-    def post_automation(self) -> Task:
+    def image_hosting(self) -> Task:
         return Task(
-            config=self.tasks_config['post_automation'],
-            context=[self.editorial_planning(),
-                     self.content_review()],
-            output_file=f'{self.OUTPUT_DIR}/automation_report.md'
+            config=self.tasks_config['image_hosting'],
+            context=[self.content_creation()],
+            output_file=f'{self.OUTPUT_DIR}/hosted_url.md'
+        )
+
+    @task
+    def instagram_publishing(self) -> Task:
+        return Task(
+            config=self.tasks_config['instagram_publishing'],
+            context=[self.editorial_planning(), self.content_review(), self.image_hosting()],
+            output_file=f'{self.OUTPUT_DIR}/publish_report.md'
         )
 
     @task
     def monitoring_and_analysis(self) -> Task:
         return Task(
             config=self.tasks_config['monitoring_and_analysis'],
-            context=[self.post_automation()],
             output_file=f'{self.OUTPUT_DIR}/performance_report.md'
         )
 
@@ -134,11 +147,7 @@ class InstagramAutomationCrew():
     def strategy_learning(self) -> Task:
         return Task(
             config=self.tasks_config['strategy_learning'],
-            context=[ 
-                self.monitoring_and_analysis(), 
-                self.content_review(), 
-                self.market_research()
-                ],
+            context=[self.market_research()],
             output_file=f'{self.OUTPUT_DIR}/strategy_report.md'
         )
 
