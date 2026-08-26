@@ -1,12 +1,20 @@
+from datetime import datetime 
+from typing import List
+from pydantic import BaseModel, Field
 from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
 from crewai.agents.agent_builder.base_agent import BaseAgent
-
+from crewai_tools import SerperDevTool
 from tools.image_hosting_tool import ImageHostingTool
 from tools.image_generation_tool import ImageGenerationTool
 from tools.instagram_api_tool import InstagramAPITool
 
-from datetime import datetime 
+class ContentCreationOutput(BaseModel):
+    caption: str = Field(..., description="The fully written Instagram caption, including hashtags.")
+    image_paths: List[str] = Field(..., description="A strict list of local file paths for the 3 to 5 generated images.")
+
+class HostedImagesOutput(BaseModel):
+    image_urls: List[str] = Field(..., description="A strict list of public ImgBB URLs for the uploaded images.")
 
 @CrewBase
 class InstagramAutomationCrew():
@@ -24,22 +32,17 @@ class InstagramAutomationCrew():
         return Agent(
             config=self.agents_config['research_agent'],
             verbose=True,
-            allow_delegation=True
+            allow_delegation=False, 
+            tools=[SerperDevTool()] 
         )
 
     @agent
     def content_selection_agent(self) -> Agent:
-        return Agent(
-            config=self.agents_config['content_selection_agent'],
-            verbose=True
-        )
+        return Agent(config=self.agents_config['content_selection_agent'], verbose=True)
 
     @agent
     def editorial_planning_agent(self) -> Agent:
-        return Agent(
-            config=self.agents_config['editorial_planning_agent'],
-            verbose=True
-        )
+        return Agent(config=self.agents_config['editorial_planning_agent'], verbose=True)
 
     @agent
     def content_creation_agent(self) -> Agent:
@@ -58,7 +61,7 @@ class InstagramAutomationCrew():
         return Agent(
             config=self.agents_config['image_hosting_agent'], 
             verbose=True,
-            tools=[ImageHostingTool()] # <-- Add your cloud upload tool here
+            tools=[ImageHostingTool()] 
         )
 
     @agent
@@ -71,29 +74,22 @@ class InstagramAutomationCrew():
 
     @agent
     def monitoring_agent(self) -> Agent:
-        return Agent(
-            config=self.agents_config['monitoring_agent'],
-            verbose=True
-        )
+        return Agent(config=self.agents_config['monitoring_agent'], verbose=True)
 
     @agent
     def learning_agent(self) -> Agent:
-        return Agent(
-            config=self.agents_config['learning_agent'],
-            verbose=True
-        )
+        return Agent(config=self.agents_config['learning_agent'], verbose=True)
 
     # Tasks section
     @task
     def market_research(self) -> Task:
-        return Task(
-            config=self.tasks_config['market_research']
-        )
+        return Task(config=self.tasks_config['market_research'])
 
     @task
     def content_selection(self) -> Task:
         return Task(
             config=self.tasks_config['content_selection'],
+            context=[self.market_research()],
             output_file=f'{self.OUTPUT_DIR}/selection_output.md'
         )
 
@@ -101,7 +97,7 @@ class InstagramAutomationCrew():
     def editorial_planning(self) -> Task:
         return Task(
             config=self.tasks_config['editorial_planning'],
-            context=[self.market_research()],
+            context=[self.content_selection()],
             output_file=f'{self.OUTPUT_DIR}/planning_output.md'
         )
 
@@ -109,7 +105,8 @@ class InstagramAutomationCrew():
     def content_creation(self) -> Task:
         return Task(
             config=self.tasks_config['content_creation'],
-            context=[self.content_selection()],
+            context=[self.editorial_planning()],
+            output_pydantic=ContentCreationOutput,
             output_file=f'{self.OUTPUT_DIR}/creation_result.md'
         )
 
@@ -117,6 +114,7 @@ class InstagramAutomationCrew():
     def content_review(self) -> Task:
         return Task(
             config=self.tasks_config['content_review'],
+            context=[self.content_creation()],
             output_file=f'{self.OUTPUT_DIR}/review_result.md'
         )
 
@@ -125,14 +123,15 @@ class InstagramAutomationCrew():
         return Task(
             config=self.tasks_config['image_hosting'],
             context=[self.content_creation()],
-            output_file=f'{self.OUTPUT_DIR}/hosted_url.md'
+            output_pydantic=HostedImagesOutput,
+            output_file=f'{self.OUTPUT_DIR}/hosted_urls.md'
         )
 
     @task
     def instagram_publishing(self) -> Task:
         return Task(
             config=self.tasks_config['instagram_publishing'],
-            context=[self.editorial_planning(), self.content_review(), self.image_hosting()],
+            context=[self.content_review(), self.image_hosting()],
             output_file=f'{self.OUTPUT_DIR}/publish_report.md'
         )
 
@@ -147,14 +146,13 @@ class InstagramAutomationCrew():
     def strategy_learning(self) -> Task:
         return Task(
             config=self.tasks_config['strategy_learning'],
-            context=[self.market_research()],
+            context=[self.monitoring_and_analysis()],
             output_file=f'{self.OUTPUT_DIR}/strategy_report.md'
         )
 
     @crew
     def crew(self) -> Crew:
         """Creates the Instagram Automation Crew"""
-
         return Crew(
             agents=self.agents,
             tasks=self.tasks,

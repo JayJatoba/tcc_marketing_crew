@@ -1,72 +1,73 @@
 market_research:
   description: >
-    Execute a comprehensive scan of current trends, audience pain points, and news regarding {research_topic}. Extract 3-5 major insights relevant to {target_audience}.
+    Execute a comprehensive scan of current trends, audience pain points, and news regarding {research_topic}. 
+    CRITICAL RULE: Restrict your search and data extraction strictly to news from the LAST 7 DAYS.
+    Extract 3-5 major insights relevant to {target_audience}.
   expected_output: >
-    A structured report detailing 3-5 verified trends and actionable insights tailored for {target_audience}.
+    A structured report detailing 3-5 verified trends and actionable insights tailored for {target_audience}, sourced exclusively from the past week.
   agent: research_agent
 
 content_selection:
   description: >
-    Review the market research report. Select the single strongest narrative angle that aligns with the {brand_tone} brand identity.
+    Review the market research report. Select the strongest narrative angle that aligns with the {brand_tone} brand identity and supports a multi-image carousel format.
   expected_output: >
     A one-page brief outlining the chosen narrative angle, key messaging points, and the rationale for its selection.
   agent: content_selection_agent
 
 editorial_planning:
   description: >
-    Transform the selected narrative into a specific post strategy. Define the hook, the core message, the Call to Action (CTA), and the visual concept.
+    Transform the selected narrative into a specific multi-image carousel strategy. Define the hook, the core message, the Call to Action (CTA), and the visual concept for 3 to 5 separate slides.
   expected_output: >
-    A detailed post blueprint outlining the hook, body outline, CTA, and visual instructions.
+    A detailed post blueprint outlining the hook, slide-by-slide body outline, CTA, and visual instructions for the carousel.
   agent: editorial_planning_agent
 
 content_creation:
   description: >
-    Create Instagram-ready content related to {research_topic}, including: 
-    - engaging captions 
-    - hashtags 
-    - CTA 
-    - visual concept 
-    - AI image generation prompt 
-    Use the image generation tool whenever visual content is needed.
+    Create an Instagram carousel package related to {research_topic}.
+    CAPTION INSTRUCTIONS:
+    - If {research_topic} is an EVENT: You MUST explicitly include official sponsors, upcoming dates, and main participants.
+    - If {research_topic} is NOT an EVENT: You MUST highlight the biggest recent developments and key milestones.
+
+    VISUAL INSTRUCTIONS: Generate 3 to 5 distinct image prompts based on the editorial plan. Use the image generation tool to create all of these images.
   expected_output: >
     A complete Instagram post package containing: 
-    - caption 
-    - hashtags 
-    - image prompt 
-    - generated image URL
+    - The detailed, condition-specific caption
+    - Hashtags 
+    - A list of generated image URLs (3 to 5 images)
   agent: content_creation_agent
 
 content_review:
   description: >
-    Review the caption and image concept. Correct any grammatical errors, refine the tone to strictly match {brand_tone}, and verify the hashtags are optimal.
+    Review the caption and image concepts. Correct grammatical errors, verify the event/non-event caption rules were followed, refine the tone to strictly match {brand_tone}, and verify hashtags.
   expected_output: >
-    The finalized, error-free caption and confirmation of the visual asset.
+    The finalized, error-free caption and confirmation of the visual assets list.
   agent: review_agent
 
 image_hosting:
   description: >
-    Locate the generated image file path from the content_creation task output. 
-    Use the Image Hosting Tool to upload it to ImgBB. 
-    Return the generated public URL clearly in your response.
+    Extract the list of generated image file paths from the content_creation task output. 
+    Use the ImgBB Batch Upload Tool to upload all images to ImgBB. 
+    Return the generated public URLs as a clearly formatted list.
   expected_output: >
-    The direct, publicly accessible ImgBB image URL (e.g., https://i.ibb.co/...).
+    A structured list of direct, publicly accessible ImgBB image URLs (e.g., ['https://i.ibb.co/...', 'https://i.ibb.co/...']).
   agent: image_hosting_agent
 
 instagram_publishing:
   description: >
     Read the task context carefully:
-    1. Extract the public image URL from the image_hosting task output.
-    2. Extract the finalized caption text from the content_review task output.
+    1. Extract the list of public image URLs from the image_hosting task output.
+    2. Add what is happening during the publishing of images, including the completing stage of each image.
+    3. Extract the finalized caption text from the content_review task output.
 
-    You MUST execute the "Instagram API Tool" using these two extracted values as parameters. 
+    You MUST execute the "Instagram Carousel Tool" using these extracted values as parameters. 
     Do NOT ask for input or respond conversationally without calling the tool.
   expected_output: >
-    The confirmation message or API response string returned directly by the Instagram API Tool.
+    The confirmation message or API response string returned directly by the Instagram Carousel Tool.
   agent: instagram_publishing_agent
 
 monitoring_and_analysis:
   description: >
-    Analyze the API publication response. Verify if the post was successful. If successful, outline a framework for tracking its first 24-hour engagement metrics.
+    Analyze the API publication response. Verify if the carousel post was successful. If successful, outline a framework for tracking its first 24-hour engagement metrics.
   expected_output: >
     A post-deployment health check report detailing the API success/failure status and the recommended engagement monitoring plan.
   agent: monitoring_agent
