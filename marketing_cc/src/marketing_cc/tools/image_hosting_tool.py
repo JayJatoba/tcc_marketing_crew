@@ -1,5 +1,5 @@
-import base64
 import os
+import base64
 from pathlib import Path
 import re
 from typing import Type, List
@@ -9,6 +9,7 @@ from dotenv import load_dotenv
 import requests
 
 load_dotenv()
+
 class ImgBBBatchUploadToolInput(BaseModel):
     file_paths: List[str] = Field(
         ..., 
@@ -45,6 +46,7 @@ class ImageHostingTool(BaseTool):
 
                 if not image_path.exists():
                     uploaded_urls.append(f"Error: File does not exist at normalized path: {image_path}") 
+                    continue
                         
                 with open(image_path, "rb") as file:
                     print(f'Uploading {image_path}...')
