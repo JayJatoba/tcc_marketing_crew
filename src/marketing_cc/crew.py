@@ -5,9 +5,9 @@ from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
 from crewai.agents.agent_builder.base_agent import BaseAgent
 from crewai_tools import SerperDevTool
-from src.marketing_cc.tools.image_hosting_tool import ImageHostingTool
-from src.marketing_cc.tools.image_generation_tool import ImageGenerationTool
-from src.marketing_cc.tools.instagram_api_tool import InstagramAPITool
+from tools.image_hosting_tool import ImageHostingTool
+from tools.image_generation_tool import ImageGenerationTool
+from tools.instagram_api_tool import InstagramAPITool
 
 class ContentCreationOutput(BaseModel):
     caption: str = Field(..., description="The fully written Instagram caption, including hashtags.")
