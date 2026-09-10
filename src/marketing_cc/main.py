@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 
 from datetime import datetime
 
-from crew import InstagramAutomationCrew
+from src.marketing_cc.crew import InstagramAutomationCrew
 
 warnings.filterwarnings(
     "ignore",
